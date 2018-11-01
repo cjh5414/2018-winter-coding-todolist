@@ -1,7 +1,12 @@
-import json
-
 from django.http import JsonResponse
+from django.shortcuts import render
+
+
 from todos.models import *
+
+
+def home(request):
+    return render(request, 'home.html')
 
 
 def create(request):

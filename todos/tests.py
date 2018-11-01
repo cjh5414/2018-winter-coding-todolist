@@ -3,6 +3,12 @@ import pytest
 from todos.models import *
 
 
+def test_home_page(client):
+    response = client.get('')
+
+    assert 'Todo List' in response.content.decode('utf-8')
+
+
 @pytest.mark.django_db
 def test_add_todo(client):
     response = client.post('/todos/new/', {
