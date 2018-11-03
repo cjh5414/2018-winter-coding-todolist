@@ -1,4 +1,7 @@
 import pytest
+from datetime import datetime
+from django.utils import timezone
+import pytz
 
 from todos.models import *
 
@@ -45,7 +48,7 @@ def test_show_todo_title_after_adding(client):
 
     client.post('/todos/new/', {
         'title': '알고리즘 공부',
-        'content': '알고리즘 문제 한 개 풀기'
+        'content': '알고리즘 문제 한 개 풀기',
     })
 
     response = client.get('/')
@@ -84,3 +87,20 @@ def test_check_if_todo_is_completed(client):
 
     edited_todo = Todo.objects.get(id=todo.id)
     assert edited_todo.isCompleted is False
+
+
+@pytest.mark.django_db
+def test_enable_to_pick_deadline(client):
+    client.post('/todos/new/', {
+        'title': '알고리즘 공부',
+        'content': '알고리즘 문제 한 개 풀기',
+        'deadline': '2018-11-04 23:59:59'
+    })
+
+    todo = Todo.objects.get(title='알고리즘 공부')
+    assert todo.deadline.year == 2018
+    assert todo.deadline.month == 11
+    assert todo.deadline.day == 4
+    assert todo.deadline.hour == 23
+    assert todo.deadline.minute == 59
+    assert todo.deadline.second == 59

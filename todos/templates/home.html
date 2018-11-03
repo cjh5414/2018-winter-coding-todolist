@@ -20,6 +20,7 @@
         <form action="/todos/new/" method="post">{% csrf_token %}
             <input type="text" class="form-control card-header" name="title" placeholder="제목" required>
             <textarea class="form-control card-body" name="content" rows="1" placeholder="내용"></textarea>
+            <input type="datetime-local" class="form-control" name="deadline">
             <input type="submit" class="btn btn-primary btn-sm btn-block" value="생성">
         </form>
     </div>
