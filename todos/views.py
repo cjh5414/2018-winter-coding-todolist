@@ -9,7 +9,7 @@ def home(request):
     return render(request, 'home.html')
 
 
-def create(request):
+def new_todo(request):
     Todo.objects.create(title=request.POST['title'], content=request.POST['content'])
     return JsonResponse({'result': 'True'})
 

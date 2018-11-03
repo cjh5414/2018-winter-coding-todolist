@@ -11,9 +11,11 @@
 <body>
 <div class="container">
     <div class="card">
-        <form>
+        <form action="/todos/new/">
             <input type="text" class="form-control card-header" id="input_title" placeholder="제목">
-            <textarea class="form-control card-body" id="input_content" rows="2" placeholder="내용"></textarea>
+            <div>
+            <textarea class="form-control card-body" id="input_content" rows="1" placeholder="내용"></textarea>
+            <input type="submit" class="btn btn-primary btn-sm btn-block" value="생성">
         </form>
     </div>
 </div>
