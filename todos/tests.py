@@ -84,4 +84,3 @@ def test_check_if_todo_is_completed(client):
 
     edited_todo = Todo.objects.get(id=todo.id)
     assert edited_todo.isCompleted is False
-
