@@ -6,9 +6,12 @@
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
             integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <title>Todo List</title>
 </head>
 <body>
@@ -25,20 +28,25 @@
 <br/>
 
 <div class="container">
-    <div class="list-group list-group-flush">
-        {% for todo in todos %}
-            <div class="input-group">
-                <a href="#" class="form-control list-group-item list-group-item-action">{{ todo.title }}</a>
-                <form action="/todos/{{ todo.id }}/delete/">
-                    <button type="submit" class="close input-group-append" id="id_delete_todo_btn">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </form>
+    {% for todo in todos %}
+    <div class="input-group mb-3">
+        <form class="input-group-prepend" action="/todos/{{ todo.id }}/edit/">
+            <div class="input-group-text">
+                <input type="checkbox" name="isCompleted" onChange="this.form.submit()">
             </div>
-        {% endfor %}
-    </div>
-</div>
+        </form>
+        <a class="form-control">{{ todo.title }}</a>
 
+        <form class="input-group-append" action="/todos/{{ todo.id }}/delete/">
+            <div class="input-group-text">
+                <button type="submit" class="close" id="id_delete_todo_btn">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </form>
+    </div>
+    {% endfor %}
+</div>
 
 {% load static %}
 <script src="{% static '/js/todolist.js' %}"></script>

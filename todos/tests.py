@@ -65,3 +65,17 @@ def test_delete_todo(client):
 
     assert todos.count() == 1
     assert todos[0].title == '알고리즘 공부'
+
+
+@pytest.mark.django_db
+def test_check_if_todo_is_completed(client):
+    todo = Todo.objects.create(title="치과가기")
+
+    assert todo.isCompleted is False
+
+    client.post('/todos/' + str(todo.id) + '/edit/', {
+        'isCompleted': 'on'
+    })
+
+    edited_todo = Todo.objects.get(id=todo.id)
+    assert edited_todo.isCompleted is True

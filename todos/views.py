@@ -18,3 +18,12 @@ def new_todo(request):
 def delete_todo(request, todo_id):
     Todo.objects.get(id=todo_id).delete()
     return redirect('/')
+
+
+def edit_todo(request, todo_id):
+    todo = Todo.objects.get(id=todo_id)
+    if 'isCompleted' in request.POST:
+        todo.isCompleted = True if request.POST.get('isCompleted') == 'on' else False
+
+    todo.save()
+    return redirect('/')
