@@ -3,6 +3,7 @@ import pytest
 from todos.models import *
 
 
+@pytest.mark.django_db
 def test_home_page(client):
     response = client.get('')
 
@@ -23,3 +24,15 @@ def test_add_todo(client):
     assert todo.content == '알고리즘 문제 한 개 풀기'
 
     assert response.json()['result'] == 'True'
+
+
+@pytest.mark.django_db
+def test_show_todo_list(client):
+    Todo.objects.create(title="알고리즘 공부", content="알고리즘 문제 한 개 풀기")
+    Todo.objects.create(title="치과가기")
+
+    response = client.get('/')
+
+    assert "알고리즘 공부" in response.content.decode('utf-8')
+    assert "알고리즘 문제 한 개 풀기" in response.content.decode('utf-8')
+    assert "치과가기" in response.content.decode('utf-8')

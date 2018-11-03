@@ -18,6 +18,13 @@
             <input type="submit" class="btn btn-primary btn-sm btn-block" value="생성">
         </form>
     </div>
+    <div>
+        {% for todo in todos %}
+            {{ todo.title }}
+            {{ todo.content }}
+        {% endfor %}
+
+    </div>
 </div>
 </body>
 </html>

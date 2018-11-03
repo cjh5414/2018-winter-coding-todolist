@@ -6,7 +6,9 @@ from todos.models import *
 
 
 def home(request):
-    return render(request, 'home.html')
+    todos = Todo.objects.all()
+
+    return render(request, 'home.html', {'todos': todos})
 
 
 def new_todo(request):
