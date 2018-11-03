@@ -73,9 +73,15 @@ def test_check_if_todo_is_completed(client):
 
     assert todo.isCompleted is False
 
-    client.post('/todos/' + str(todo.id) + '/edit/', {
+    client.post('/todos/' + str(todo.id) + '/edit/check', {
         'isCompleted': 'on'
     })
 
     edited_todo = Todo.objects.get(id=todo.id)
     assert edited_todo.isCompleted is True
+
+    client.post('/todos/' + str(todo.id) + '/edit/check')
+
+    edited_todo = Todo.objects.get(id=todo.id)
+    assert edited_todo.isCompleted is False
+

@@ -26,20 +26,19 @@
 </div>
 
 <br/>
-
 <div class="container">
     {% for todo in todos %}
     <div class="input-group mb-3">
-        <form class="input-group-prepend" action="/todos/{{ todo.id }}/edit/">
+        <form class="input-group-prepend" action="/todos/{{ todo.id }}/edit/check" method="post">{% csrf_token %}
             <div class="input-group-text">
                 <input type="checkbox" name="isCompleted" onChange="this.form.submit()">
             </div>
         </form>
         <a class="form-control">{{ todo.title }}</a>
 
-        <form class="input-group-append" action="/todos/{{ todo.id }}/delete/">
+        <form class="input-group-append" action="/todos/{{ todo.id }}/delete/" method="post">{% csrf_token %}
             <div class="input-group-text">
-                <button type="submit" class="close" id="id_delete_todo_btn">
+                <button type="submit" class="close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -48,6 +47,30 @@
     {% endfor %}
 </div>
 
+<br/>
+
+<div class="container" style="opacity:0.5;">
+    {% for todo in completed_todos %}
+    <div class="input-group mb-3">
+        <form class="input-group-prepend" action="/todos/{{ todo.id }}/edit/check" method="post">{% csrf_token %}
+            <div class="input-group-text">
+                <input type="checkbox" name="isCompleted" onChange="this.form.submit()" checked>
+            </div>
+        </form>
+        <a class="form-control" style="text-decoration:line-through;">{{ todo.title }}</a>
+
+        <form class="input-group-append" action="/todos/{{ todo.id }}/delete/" method="post">{% csrf_token %}
+            <div class="input-group-text">
+                <button type="submit" class="close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        </form>
+    </div>
+    {% endfor %}
+</div>
+
+</div>
 {% load static %}
 <script src="{% static '/js/todolist.js' %}"></script>
 
