@@ -11,19 +11,22 @@
 <body>
 <div class="container">
     <div class="card">
-        <form action="/todos/new/">
-            <input type="text" class="form-control card-header" id="input_title" placeholder="제목">
+        <form action="/todos/new/" method="post">{% csrf_token %}
+            <input type="text" class="form-control card-header" name="title" placeholder="제목">
             <div>
-            <textarea class="form-control card-body" id="input_content" rows="1" placeholder="내용"></textarea>
+            <textarea class="form-control card-body" name="content" rows="1" placeholder="내용"></textarea>
             <input type="submit" class="btn btn-primary btn-sm btn-block" value="생성">
         </form>
     </div>
-    <div>
-        {% for todo in todos %}
-            {{ todo.title }}
-            {{ todo.content }}
-        {% endfor %}
+</div>
 
+<br/>
+
+<div class="container">
+    <div class="list-group list-group-flush">
+        {% for todo in todos %}
+            <a href="#" class="list-group-item list-group-item-action">{{ todo.title }}</a>
+        {% endfor %}
     </div>
 </div>
 </body>

@@ -23,7 +23,8 @@ def test_add_todo(client):
     assert todo.title == '알고리즘 공부'
     assert todo.content == '알고리즘 문제 한 개 풀기'
 
-    assert response.json()['result'] == 'True'
+    assert response.status_code == 302
+    assert response.url == '/'
 
 
 @pytest.mark.django_db
@@ -34,5 +35,18 @@ def test_show_todo_list(client):
     response = client.get('/')
 
     assert "알고리즘 공부" in response.content.decode('utf-8')
-    assert "알고리즘 문제 한 개 풀기" in response.content.decode('utf-8')
     assert "치과가기" in response.content.decode('utf-8')
+
+
+@pytest.mark.django_db
+def test_show_todo_title_after_adding(client):
+    response = client.get('/')
+    assert "알고리즘 공부" not in response.content.decode('utf-8')
+
+    client.post('/todos/new/', {
+        'title': '알고리즘 공부',
+        'content': '알고리즘 문제 한 개 풀기'
+    })
+
+    response = client.get('/')
+    assert "알고리즘 공부" in response.content.decode('utf-8')
