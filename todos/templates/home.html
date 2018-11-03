@@ -6,6 +6,9 @@
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
             integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <title>Todo List</title>
 </head>
 <body>
@@ -13,7 +16,6 @@
     <div class="card">
         <form action="/todos/new/" method="post">{% csrf_token %}
             <input type="text" class="form-control card-header" name="title" placeholder="제목">
-            <div>
             <textarea class="form-control card-body" name="content" rows="1" placeholder="내용"></textarea>
             <input type="submit" class="btn btn-primary btn-sm btn-block" value="생성">
         </form>
@@ -25,9 +27,21 @@
 <div class="container">
     <div class="list-group list-group-flush">
         {% for todo in todos %}
-            <a href="#" class="list-group-item list-group-item-action">{{ todo.title }}</a>
+            <div class="input-group">
+                <a href="#" class="form-control list-group-item list-group-item-action">{{ todo.title }}</a>
+                <form action="/todos/{{ todo.id }}/delete/">
+                    <button type="submit" class="close input-group-append" id="id_delete_todo_btn">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </form>
+            </div>
         {% endfor %}
     </div>
 </div>
+
+
+{% load static %}
+<script src="{% static '/js/todolist.js' %}"></script>
+
 </body>
 </html>

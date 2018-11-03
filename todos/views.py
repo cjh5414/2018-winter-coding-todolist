@@ -14,3 +14,7 @@ def new_todo(request):
     Todo.objects.create(title=request.POST['title'], content=request.POST['content'])
     return redirect('/')
 
+
+def delete_todo(request, todo_id):
+    Todo.objects.get(id=todo_id).delete()
+    return redirect('/')
