@@ -27,24 +27,36 @@
 </div>
 
 <br/>
-<div class="container">
+<div class="container accordion" id="todo_list">
     {% for todo in todos %}
-    <div class="input-group mb-3">
-        <form class="input-group-prepend" action="/todos/{{ todo.id }}/edit/check" method="post">{% csrf_token %}
-            <div class="input-group-text">
-                <input type="checkbox" name="isCompleted" onChange="this.form.submit()">
-            </div>
-        </form>
-        <a class="form-control">{{ todo.title }}</a>
+        <div class="input-group mb-3">
+            <form class="input-group-prepend" action="/todos/{{ todo.id }}/edit-check" method="post">{% csrf_token %}
+                <div class="input-group-text">
+                    <input type="checkbox" name="isCompleted" onChange="this.form.submit()">
+                </div>
+            </form>
 
-        <form class="input-group-append" action="/todos/{{ todo.id }}/delete/" method="post">{% csrf_token %}
-            <div class="input-group-text">
-                <button type="submit" class="close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
+            <a href="#" id="todo{{ todo.id }}" class="form-control list-group-item-action" data-toggle="collapse" data-target="#collapse{{ todo.id }}" aria-expanded="true"
+                    aria-controls="collapse{{ todo.id }}">{{ todo.title }}</a>
+
+            <form class="input-group-append" action="/todos/{{ todo.id }}/delete/" method="post">{% csrf_token %}
+                <div class="input-group-text">
+                    <button type="submit" class="close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    <div id="collapse{{ todo.id }}" class="collapse" aria-labelledby="todo{{ todo.id }}" data-parent="#todo_list">
+        <form action="/todos/{{ todo.id }}/edit/" method="post">{% csrf_token %}
+            <input type="text" class="form-control card-header" name="title" value="{{ todo.title }}" required>
+            <textarea class="form-control card-body" name="content">{{ todo.content }}</textarea>
+            <input type="datetime-local" class="form-control" name="deadline" value="{{ todo.deadline }}">
+            <input type="submit" class="btn btn-primary btn-sm btn-block" value="수정">
         </form>
+        <br/>
     </div>
+
     {% endfor %}
 </div>
 
@@ -53,7 +65,7 @@
 <div class="container" style="opacity:0.5;">
     {% for todo in completed_todos %}
     <div class="input-group mb-3">
-        <form class="input-group-prepend" action="/todos/{{ todo.id }}/edit/check" method="post">{% csrf_token %}
+        <form class="input-group-prepend" action="/todos/{{ todo.id }}/edit-check" method="post">{% csrf_token %}
             <div class="input-group-text">
                 <input type="checkbox" name="isCompleted" onChange="this.form.submit()" checked>
             </div>

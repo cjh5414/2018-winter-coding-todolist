@@ -1,7 +1,5 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST, require_GET
-from django.utils.dateparse import parse_datetime
-import pytz
 
 from todos.models import *
 
@@ -10,6 +8,11 @@ from todos.models import *
 def home(request):
     todos = Todo.objects.filter(isCompleted=False)
     completed_todos = Todo.objects.filter(isCompleted=True)
+
+    for todo in todos:
+        todo.deadline = todo.deadline.strftime("%Y-%m-%dT%H:%M")
+    for todo in completed_todos:
+        todo.deadline = todo.deadline.strftime("%Y-%m-%dT%H:%M")
 
     return render(request, 'home.html', {'todos': todos, 'completed_todos': completed_todos})
 
@@ -27,6 +30,20 @@ def new_todo(request):
 @require_POST
 def delete_todo(request, todo_id):
     Todo.objects.get(id=todo_id).delete()
+    return redirect('/')
+
+
+@require_POST
+def edit_todo(request, todo_id):
+    todo = Todo.objects.get(id=todo_id)
+    todo.title = request.POST.get('title')
+    todo.content = request.POST.get('content')
+    datetime = None
+    if 'deadline' in request.POST and request.POST['deadline'] != "":
+        datetime = request.POST['deadline']
+    todo.deadline = datetime
+    todo.save()
+
     return redirect('/')
 
 

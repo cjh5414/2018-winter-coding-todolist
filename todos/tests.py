@@ -76,14 +76,14 @@ def test_check_if_todo_is_completed(client):
 
     assert todo.isCompleted is False
 
-    client.post('/todos/' + str(todo.id) + '/edit/check', {
+    client.post('/todos/' + str(todo.id) + '/edit-check', {
         'isCompleted': 'on'
     })
 
     edited_todo = Todo.objects.get(id=todo.id)
     assert edited_todo.isCompleted is True
 
-    client.post('/todos/' + str(todo.id) + '/edit/check')
+    client.post('/todos/' + str(todo.id) + '/edit-check')
 
     edited_todo = Todo.objects.get(id=todo.id)
     assert edited_todo.isCompleted is False
@@ -104,3 +104,23 @@ def test_enable_to_pick_deadline(client):
     assert todo.deadline.hour == 23
     assert todo.deadline.minute == 59
     assert todo.deadline.second == 59
+
+
+@pytest.mark.django_db
+def test_edit_todo(client):
+    client.post('/todos/new/', {
+        'title': '알고리즘 공부',
+        'content': '알고리즘 문제 한 개 풀기',
+        'deadline': '2018-11-04 23:59:59'
+    })
+
+    client.post('/todos/1/edit/', {
+        'title': '알고리즘 시험 준비',
+        'content': '알고리즘 시험 준비하기'
+    })
+
+    todo = Todo.objects.get(id=1)
+
+    assert todo.title == '알고리즘 시험 준비'
+    assert todo.content == '알고리즘 시험 준비하기'
+
