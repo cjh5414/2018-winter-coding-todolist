@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.views.decorators.http import require_POST, require_GET
+from django.utils import timezone
 
 from todos.models import *
 
@@ -10,9 +11,13 @@ def home(request):
     completed_todos = Todo.objects.filter(isCompleted=True)
 
     for todo in todos:
-        todo.deadline = todo.deadline.strftime("%Y-%m-%dT%H:%M")
+        if todo.deadline is not None:
+            if todo.deadline < timezone.now():
+                todo.miss_deadline = True
+            todo.deadline = todo.deadline.strftime("%Y-%m-%dT%H:%M")
     for todo in completed_todos:
-        todo.deadline = todo.deadline.strftime("%Y-%m-%dT%H:%M")
+        if todo.deadline is not None:
+            todo.deadline = todo.deadline.strftime("%Y-%m-%dT%H:%M")
 
     return render(request, 'home.html', {'todos': todos, 'completed_todos': completed_todos})
 
@@ -21,7 +26,6 @@ def home(request):
 def new_todo(request):
     datetime = None
     if 'deadline' in request.POST and request.POST['deadline'] != "":
-        # datetime = pytz.timezone("Asia/Seoul").localize(parse_datetime(request.POST.get('deadline')))
         datetime = request.POST['deadline']
     Todo.objects.create(title=request.POST['title'], content=request.POST['content'], deadline=datetime)
     return redirect('/')

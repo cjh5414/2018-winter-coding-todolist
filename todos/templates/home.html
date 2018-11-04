@@ -39,6 +39,14 @@
             <a href="#" id="todo{{ todo.id }}" class="form-control list-group-item-action" data-toggle="collapse" data-target="#collapse{{ todo.id }}" aria-expanded="true"
                     aria-controls="collapse{{ todo.id }}">{{ todo.title }}</a>
 
+            {% if todo.miss_deadline %}
+                <div class="input-group-append">
+                    <div class="input-group-text list-group-item-danger">
+                        마감
+                    </div>
+                </div>
+            {% endif %}
+
             <form class="input-group-append" action="/todos/{{ todo.id }}/delete/" method="post">{% csrf_token %}
                 <div class="input-group-text">
                     <button type="submit" class="close">

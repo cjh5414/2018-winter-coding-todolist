@@ -1,9 +1,6 @@
 import pytest
-from datetime import datetime
-from django.utils import timezone
-import pytz
-
 from todos.models import *
+from django.utils import timezone
 
 
 @pytest.mark.django_db
@@ -108,11 +105,7 @@ def test_enable_to_pick_deadline(client):
 
 @pytest.mark.django_db
 def test_edit_todo(client):
-    client.post('/todos/new/', {
-        'title': '알고리즘 공부',
-        'content': '알고리즘 문제 한 개 풀기',
-        'deadline': '2018-11-04 23:59:59'
-    })
+    Todo.objects.create(title="알고리즘 공부", content="알고리즘 문제 한 개 풀기", deadline="2018-11-04 23:59:59")
 
     client.post('/todos/1/edit/', {
         'title': '알고리즘 시험 준비',
@@ -124,3 +117,15 @@ def test_edit_todo(client):
     assert todo.title == '알고리즘 시험 준비'
     assert todo.content == '알고리즘 시험 준비하기'
 
+
+@pytest.mark.django_db
+def test_show_todo_missed_deadline(client):
+    cur_time = timezone.now()
+
+    Todo.objects.create(title="치과 가기", deadline=cur_time + timezone.timedelta(days=3))
+    response = client.get('/')
+    assert '마감' not in response.content.decode('utf-8')
+
+    Todo.objects.create(title="알고리즘 공부", content="알고리즘 문제 한 개 풀기", deadline=cur_time - timezone.timedelta(days=3))
+    response = client.get('/')
+    assert '마감' in response.content.decode('utf-8')
