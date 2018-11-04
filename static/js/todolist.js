@@ -115,3 +115,14 @@ function addDnDHandlers(elem) {
 
 var cols = document.querySelectorAll('#todo_list .todo');
 [].forEach.call(cols, addDnDHandlers);
+
+$("#completed_todo_list_btn").click(function () {
+    if ($(this).val() === "on") {
+        $(this).val("off");
+        $("#complted_todo_list").hide();
+    }
+    else {
+        $(this).val("on");
+        $("#complted_todo_list").show();
+    }
+});

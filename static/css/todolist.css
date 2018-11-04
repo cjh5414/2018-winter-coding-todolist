@@ -17,3 +17,7 @@
     // border: 2px dashed #000;
     border-top: 2px solid blue;
 }
+
+.container {
+    width: 75%
+}

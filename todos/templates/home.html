@@ -17,18 +17,42 @@
     <title>Todo List</title>
 </head>
 <body>
-<div class="container">
-    <div class="card">
+
+<div class="jumbotron">
+    <div class="container">
+        <h1 class="display-3 text-center">Todo List</h1>
+        <br/>
         <form action="/todos/new/" method="post">{% csrf_token %}
-            <input type="text" class="form-control card-header" name="title" placeholder="제목" required>
-            <textarea class="form-control card-body" name="content" rows="1" placeholder="내용"></textarea>
-            <input type="datetime-local" class="form-control" name="deadline">
-            <input type="submit" class="btn btn-primary btn-sm btn-block" value="생성">
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">제목</span>
+                </div>
+                <input type="text" class="form-control" name="title" required>
+            </div>
+
+            <div class="input-group mb-2">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">내용</span>
+                </div>
+                <textarea class="form-control" name="content" rows="1"></textarea>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">날짜</span>
+                </div>
+                <input type="datetime-local" class="form-control" name="deadline">
+            </div>
+
+            <div class="text-center">
+                <input type="submit" class="btn btn-outline-secondary" value="할 일 추가">
+            </div>
         </form>
     </div>
 </div>
 
 <br/>
+
 <div class="container accordion" id="todo_list">
     {% for todo in todos %}
     <div id="todo{{ todo.id }}" class="todo" draggable="true">
@@ -61,10 +85,27 @@
         </div>
         <div id="collapse{{ todo.id }}" class="collapse" aria-labelledby="todo{{ todo.id }}" data-parent="#todo_list">
             <form action="/todos/{{ todo.id }}/edit/" method="post">{% csrf_token %}
-                <input type="text" class="form-control card-header" name="title" value="{{ todo.title }}" required>
-                <textarea class="form-control card-body" name="content">{{ todo.content }}</textarea>
-                <input type="datetime-local" class="form-control" name="deadline" value="{{ todo.deadline }}">
-                <input type="submit" class="btn btn-primary btn-sm btn-block" value="수정">
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">제목</span>
+                    </div>
+                    <input type="text" class="form-control" name="title" value="{{ todo.title }}" required>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">내용</span>
+                    </div>
+                    <textarea class="form-control" name="content">{{ todo.content }}</textarea>
+                </div>
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">기한</span>
+                    </div>
+                    <input type="datetime-local" class="form-control" name="deadline" value="{{ todo.deadline }}">
+                </div>
+                <div class="input-group">
+                    <input type="submit" class="btn btn-secondary btn-sm btn-block" value="수정">
+                </div>
             </form>
             <br/>
         </div>
@@ -74,25 +115,33 @@
 
 <br/>
 
-<div class="container" style="opacity:0.5;">
-    {% for todo in completed_todos %}
-    <div class="input-group mb-2">
-        <form class="input-group-prepend" action="/todos/{{ todo.id }}/edit-check" method="post">{% csrf_token %}
-            <div class="input-group-text">
-                <input type="checkbox" name="isCompleted" onChange="this.form.submit()" checked>
-            </div>
-        </form>
-        <a class="form-control" style="text-decoration:line-through;">{{ todo.title }}</a>
-
-        <form class="input-group-append" action="/todos/{{ todo.id }}/delete/" method="post">{% csrf_token %}
-            <div class="input-group-text">
-                <button type="submit" class="close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        </form>
+<div class="container">
+    <div class="mb-1">
+        <button id="completed_todo_list_btn" type="button" value="on" class="btn btn-sm btn-outline-secondary" data-toggle="button">
+            완료된 항목
+        </button>
     </div>
-    {% endfor %}
+
+    <div id="complted_todo_list" style="opacity:0.5;">
+        {% for todo in completed_todos %}
+        <div class="input-group mb-2">
+            <form class="input-group-prepend" action="/todos/{{ todo.id }}/edit-check" method="post">{% csrf_token %}
+                <div class="input-group-text">
+                    <input type="checkbox" name="isCompleted" onChange="this.form.submit()" checked>
+                </div>
+            </form>
+            <a class="form-control" style="text-decoration:line-through;">{{ todo.title }}</a>
+
+            <form class="input-group-append" action="/todos/{{ todo.id }}/delete/" method="post">{% csrf_token %}
+                <div class="input-group-text">
+                    <button type="submit" class="close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
 </div>
 
 </div>
