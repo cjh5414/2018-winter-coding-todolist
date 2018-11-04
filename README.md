@@ -1,9 +1,12 @@
 ## 스펙
-python 3.5.2
-django 2.1.2
-pytest 3.9.3
-sqlite3
-bootstrap4
+- python 3.5.2
+- django 2.1.2
+- pytest 3.9.3
+- sqlite3
+- bootstrap4
+- nginx 1.4.6 
+- uwsgi 2.0.17.1
+- Ubuntu 14.04.5
 
 ## 서버 배포 과정
 
