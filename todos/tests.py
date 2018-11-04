@@ -129,3 +129,60 @@ def test_show_todo_missed_deadline(client):
     Todo.objects.create(title="알고리즘 공부", content="알고리즘 문제 한 개 풀기", deadline=cur_time - timezone.timedelta(days=3))
     response = client.get('/')
     assert '마감' in response.content.decode('utf-8')
+
+
+@pytest.mark.django_db
+def test_set_priority_when_todo_is_added(client):
+    client.post('/todos/new/', {'title': 'todo1', 'content': ''})
+    client.post('/todos/new/', {'title': 'todo2', 'content': ''})
+    client.post('/todos/new/', {'title': 'todo3', 'content': ''})
+
+    assert Todo.objects.get(title='todo1').priority == 1
+    assert Todo.objects.get(title='todo2').priority == 2
+    assert Todo.objects.get(title='todo3').priority == 3
+
+
+@pytest.mark.django_db
+def test_change_priority(client):
+    client.post('/todos/new/', {'title': 'todo1', 'content': ''})
+    client.post('/todos/new/', {'title': 'todo2', 'content': ''})
+    client.post('/todos/new/', {'title': 'todo3', 'content': ''})
+    client.post('/todos/new/', {'title': 'todo4', 'content': ''})
+
+    client.post('/todos/edit-priority/', {
+        'upTodoId': '4',
+        'baseTodoId': '2'
+    })
+
+    assert Todo.objects.get(title='todo1').priority == 1
+    assert Todo.objects.get(title='todo2').priority == 3
+    assert Todo.objects.get(title='todo3').priority == 4
+    assert Todo.objects.get(title='todo4').priority == 2
+
+    client.post('/todos/edit-priority/', {
+        'upTodoId': '2',
+        'baseTodoId': '1'
+    })
+
+    assert Todo.objects.get(title='todo1').priority == 2
+    assert Todo.objects.get(title='todo2').priority == 1
+    assert Todo.objects.get(title='todo3').priority == 4
+    assert Todo.objects.get(title='todo4').priority == 3
+
+    client.post('/todos/new/', {'title': 'todo5', 'content': ''})
+
+    assert Todo.objects.get(title='todo5').priority == 5
+
+
+@pytest.mark.django_db
+def test_change_priority_after_todo_is_deleted(client):
+    client.post('/todos/new/', {'title': 'todo1', 'content': ''})
+    client.post('/todos/new/', {'title': 'todo2', 'content': ''})
+    client.post('/todos/new/', {'title': 'todo3', 'content': ''})
+    client.post('/todos/new/', {'title': 'todo4', 'content': ''})
+
+    client.post('/todos/2/delete/')
+
+    assert Todo.objects.get(title='todo1').priority == 1
+    assert Todo.objects.get(title='todo3').priority == 2
+    assert Todo.objects.get(title='todo4').priority == 3
