@@ -1,5 +1,5 @@
 ## 결과물 URL
-www.memorist.xyz
+http://182.162.104.151/
 
 ## 스펙
 - python 3.5.2
